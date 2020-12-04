@@ -1,0 +1,1 @@
+INSERT INTO data (s3_bucket, s3_timestamp, s3_size, filename) VALUES (:s3_bucket, :s3_timestamp, :s3_size, :filename);
