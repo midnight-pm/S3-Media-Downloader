@@ -55,6 +55,12 @@
 					Specify the name of the Amazon S3 Bucket
 				*/
 				"s3_bucket_name" => ""
+
+				/*
+					Specify an alternate URL to use to retrieve files.
+					This may be needed in some cases, i.e.: if the publicly available download is behind a proxy service.
+				*/
+				, "alternate_url" => ""
 			)
 
 		/*

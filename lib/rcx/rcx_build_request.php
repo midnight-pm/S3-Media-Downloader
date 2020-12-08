@@ -43,7 +43,14 @@
 				/*
 					Build Request JSON Object and Parameters
 				*/
-				$url = "https://" . $config_aws["s3_bucket_name"] . ".s3.amazonaws.com/" . $file_details["filename"];
+				if(empty($config_aws["alternate_url"]) === true)
+				{
+					$url = "https://" . $config_aws["s3_bucket_name"] . ".s3.amazonaws.com/" . $file_details["filename"];
+				}
+				else
+				{
+					$url = $config_aws["alternate_url"] . "/" . $file_details["filename"];
+				}
 				$headers = ["User-Agent: " . $config_rcx["user_agent"]];
 				$post_data = [];
 				$user_data = ["filename" => $file_details["filename"], "size" => $file_details["size"], "date" => $file_details["date"], "time" => $file_details["time"]];
