@@ -34,6 +34,6 @@ In order to maximize portability, [SQLite3](https://www.sqlite.org/index.html) w
 
 ----
 
-### Standard Faire:
+### Standard Fare:
 
 This is provided with no warranty nor a gaurantee of any kind.
