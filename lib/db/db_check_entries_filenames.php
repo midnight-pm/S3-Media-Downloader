@@ -157,8 +157,8 @@
 							else
 							{
 								trigger_error("[$key] \"" . $fileinfo['filename'] . "\" found in database, but has not yet been retrieved.", E_USER_NOTICE);
-								var_dump(count($fetch));
-								var_dump($fetch);
+								// var_dump(count($fetch));
+								// var_dump($fetch);
 							}
 						}
 					}
