@@ -63,7 +63,9 @@
 						trigger_error("\"" . $fileinfo["path"] . "\" - Erroneous Download Detected. - [process_downloads]", E_USER_WARNING);
 						$ffprobe_get_error = ffprobe_file_get_error($fileinfo["path"], $ffprobe_path);
 						trigger_error("\"" . $fileinfo["path"] . "\" - [" . $ffprobe_get_error["return_var"] . "] - " . $ffprobe_get_error["output"] . " - [process_downloads]", E_USER_WARNING);
+
 						/*
+							Delete the erroneous file.
 							https://www.php.net/manual/en/function.unlink.php
 						*/
 						if(unlink($fileinfo["path"]) === true)
@@ -76,14 +78,43 @@
 						}
 						/*
 						$db_mark = db_update_mark_file_as_downloaded($dbh, $fileinfo["filename"]);
-						if($db_mark === true)
-						{
-						}
 						*/
 					}
+					/*
+						Validate that the expected array under the key of "$ffprobe_array["format"]["tags"]" is set and is not empty.
+						If it is not set, or if it is empty, then consider the file bad as no tags have been added.
+					*/
+					elseif(empty($ffprobe_array["format"]["tags"]) === true)
+					{
+						trigger_error("\"" . $fileinfo["path"] . "\" - Erroneous Download Detected. - [process_downloads]", E_USER_WARNING);
+						$ffprobe_get_error = ffprobe_file_get_error($fileinfo["path"], $ffprobe_path);
+						trigger_error("\"" . $fileinfo["path"] . "\" - [" . $ffprobe_get_error["return_var"] . "] - " . $ffprobe_get_error["output"] . " - [process_downloads]", E_USER_WARNING);
+
+						/*
+							Delete the erroneous file.
+						*/
+						if(unlink($fileinfo["path"]) === true)
+						{
+							trigger_error("\"" . $fileinfo["path"] . "\" - Discard File - [process_downloads]", E_USER_NOTICE);
+						}
+						else
+						{
+							trigger_error("\"" . $fileinfo["path"] . "\" - Error encountered when attempting to discard file - [process_downloads]", E_USER_WARNING);
+						}
+
+						/*
+							Do not retrieve this file again.
+							----
+							Update the database to indicate that the file has been retrieved already.
+							This will prevent it from being retrieved again in the future.
+						*/
+						$db_mark = db_update_mark_file_as_downloaded($dbh, $fileinfo["filename"]);
+					}
+					/*
+						Begin normal processing.
+					*/
 					else
 					{
-
 						/*
 							Using ffmpeg, calculate the MD5 hash using the file's actual audio and video streams (if applicable).
 							This will be used to detect duplicates - even when tag data differs.
