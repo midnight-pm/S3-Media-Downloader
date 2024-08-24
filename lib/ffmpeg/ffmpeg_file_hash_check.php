@@ -8,7 +8,7 @@
 		/*
 			http://php.net/manual/en/functions.user-defined.php
 		*/
-		function ffmpeg_file_hash_check($file_path, $ffmpeg_path)
+		function ffmpeg_file_hash_check($file_path, $ffmpeg_path, $ffmpeg_hwaccel)
 		{
 			/*
 				https://www.php.net/manual/en/function.is-string.php
@@ -65,6 +65,27 @@
 				*/
 				$ffmpeg_path = "ffmpeg";
 			}
+			/*
+				Check if the parameter to enable Hardware Acceleration has been set.
+				If it is empty, then default to true.
+			*/
+			if(empty($ffmpeg_hwaccel === false))
+			{
+				trigger_error("Hardware Acceleration parameter is missing. - [ffmpeg_file_hash_check]", E_USER_WARNING);
+				$ffmpeg_hwaccel_default = (bool) true;
+			}
+			else
+			{
+				if(is_bool($ffmpeg_hwaccel) === false)
+				{
+					trigger_error("Hardware Acceleration parameter is not properly configured. - [ffmpeg_file_hash_check]", E_USER_WARNING);
+					$ffmpeg_hwaccel_default = (bool) true;
+				}
+				else
+				{
+					$ffmpeg_hwaccel_default = (bool) false;
+				}
+			}
 
 			/*
 				https://www.php.net/manual/en/function.escapeshellarg.php
@@ -72,7 +93,25 @@
 				https://trac.ffmpeg.org/wiki/Map
 			*/
 			$input = escapeshellarg($file_path);
-			$execution_line = "$ffmpeg_path -i $input -map 0:v? -map 0:a? -f md5 - 2>/dev/null | cut -c 5-36";
+
+			/*
+				Use hardware acceleration with ffmpeg if it is enabled, or if it has defaulted to true.
+				If it is not enabled, then use CPU decoding only.
+				Reference: https://stackoverflow.com/a/73238755/5812026
+			*/
+			if($ffmpeg_hwaccel_default === (bool) true)
+			{
+				trigger_error("Hardware Acceleration defaulting to enabled: mode 'auto'. - [ffmpeg_file_hash_check]", E_USER_NOTICE);
+				$ffmpeg_hwaccel = (bool) true;
+			}
+			if($ffmpeg_hwaccel = (bool) true)
+			{
+				$execution_line = "$ffmpeg_path -hwaccel auto -i $input -map 0:v? -map 0:a? -f md5 - 2>/dev/null | cut -c 5-36";
+			}
+			else
+			{
+				$execution_line = "$ffmpeg_path -i $input -map 0:v? -map 0:a? -f md5 - 2>/dev/null | cut -c 5-36";
+			}
 			// var_dump($execution_line);
 
 			/*

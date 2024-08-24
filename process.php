@@ -120,11 +120,11 @@
 		/*
 			Verify that ffmpeg is available
 		*/
-		if(ffmpeg_verify_install($config["dependencies"]["ffmpeg"]) === false)
+		if(ffmpeg_verify_install($config["dependencies"]["ffmpeg"]["path"]) === false)
 		{
 			if(empty($config["dependencies"]["ffmpeg"]) === false)
 			{
-				trigger_error("ffmpeg does not appear to be installed at the specified location of \"" . $config["dependencies"]["ffmpeg"] . "\". Please install ffmpeg, or provide the correct full path to ffmpeg's location." . PHP_EOL, E_USER_ERROR);
+				trigger_error("ffmpeg does not appear to be installed at the specified location of \"" . $config["dependencies"]["ffmpeg"]["path"] . "\". Please install ffmpeg, or provide the correct full path to ffmpeg's location." . PHP_EOL, E_USER_ERROR);
 			}
 			else
 			{
@@ -386,7 +386,7 @@
 	*/
 	try
 	{
-		$process_downloads = process_downloads($db, $retrieved_files, $config["dependencies"]["ffmpeg"], $config["dependencies"]["ffprobe"], $config["storage"]["directory"]);
+		$process_downloads = process_downloads($db, $retrieved_files, $config["dependencies"]["ffmpeg"]["path"], $config["dependencies"]["ffmpeg"]["hwaccel"], $config["dependencies"]["ffprobe"], $config["storage"]["directory"]);
 	}
 	catch (Exception $e)
 	{

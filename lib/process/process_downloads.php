@@ -2,7 +2,7 @@
 
 	if(!function_exists("process_downloads"))
 	{
-		function process_downloads($dbh, $array, $ffmpeg_path, $ffprobe_path, $storage_directory)
+		function process_downloads($dbh, $array, $ffmpeg_path, $ffmpeg_hwaccel, $ffprobe_path, $storage_directory)
 		{
 			/*
 				Test input.
@@ -119,7 +119,7 @@
 							Using ffmpeg, calculate the MD5 hash using the file's actual audio and video streams (if applicable).
 							This will be used to detect duplicates - even when tag data differs.
 						*/
-						$ffmpeg_md5 = ffmpeg_file_hash_check($fileinfo["path"], $ffmpeg_path);
+						$ffmpeg_md5 = ffmpeg_file_hash_check($fileinfo["path"], $ffmpeg_path, $ffmpeg_hwaccel);
 						// var_dump($ffmpeg_md5);
 
 						if($ffmpeg_md5 === false)

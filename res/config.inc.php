@@ -26,11 +26,21 @@
 				*/
 				"aws" => ""
 
-				/*
-					Optional: Specify the full path to ffmpeg
-							  i.e.: /usr/bin/ffmpeg
-				*/
-				, "ffmpeg" => ""
+				, "ffmpeg" => array(
+					/*
+						Optional: Specify the full path to ffmpeg
+								  i.e.: /usr/bin/ffmpeg
+					*/
+					"path" => ""
+					/*
+						Optional: Enable ffmpeg hardware acceleration.
+								  Set to "true" (without quotes) to enable.
+								  Set to "false" (without quotes) to disable.
+
+						Notice:	  This will be enabled by default if this is not set.
+					*/
+					, "hwaccel" => true
+				)
 
 				/*
 					Optional: Specify the full path to ffprobe
