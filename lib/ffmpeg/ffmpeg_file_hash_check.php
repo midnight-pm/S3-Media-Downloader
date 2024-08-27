@@ -71,11 +71,6 @@
 			*/
 			if(empty($ffmpeg_hwaccel === false))
 			{
-				trigger_error("Hardware Acceleration parameter is missing. - [ffmpeg_file_hash_check]", E_USER_WARNING);
-				$ffmpeg_hwaccel_default = (bool) true;
-			}
-			else
-			{
 				if(is_bool($ffmpeg_hwaccel) === false)
 				{
 					trigger_error("Hardware Acceleration parameter is not properly configured. - [ffmpeg_file_hash_check]", E_USER_WARNING);
@@ -85,6 +80,11 @@
 				{
 					$ffmpeg_hwaccel_default = (bool) false;
 				}
+			}
+			else
+			{
+				trigger_error("Hardware Acceleration parameter is missing. - [ffmpeg_file_hash_check]", E_USER_WARNING);
+				$ffmpeg_hwaccel_default = (bool) true;
 			}
 
 			/*
